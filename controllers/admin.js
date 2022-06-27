@@ -26,8 +26,13 @@ module.exports.add = (req,res) => {
 
 module.exports.fethAllDeservers = (req,res) => {
     try {
-
-        let sql = `select * from deservers`;
+        let type = req.query.type;
+        let sql = ''
+        if (type && type == 1) {
+         sql = `select * from deservers where accept_status = 1`;
+        }else {
+         sql = `select * from deservers where accept_status = 0`;
+        }
 
         pool.query(sql , (err , result  ,fields) => {
                 if (err) throw err;
