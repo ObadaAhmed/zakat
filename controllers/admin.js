@@ -1,6 +1,8 @@
 const pool = require('../DB_CONFIG/DB');
 
 
+
+
 module.exports.add = (req,res) => {
     try {
         let {username , password} = req.body;
@@ -13,6 +15,35 @@ module.exports.add = (req,res) => {
                    status : `success` ,
                    successMessage : result
                });
+        });
+    }catch (err) {
+        console.log(err);
+        res.send({
+            status : `error` ,
+            errorMessage : err
+        });
+    }
+
+}
+module.exports.signIn = (req,res) => {
+    try {
+        let {username , password} = req.body;
+        let sql = `select * from admin where username = '${username}' and password = '${password}'`;
+
+
+        pool.query(sql , (err , result  ,fields) => {
+                if (err) throw err;
+                if (result.length > 0) {
+                   res.send({
+                       status : `success` ,
+                       successMessage : result
+                   });
+                }else {
+                    res.send({
+                        status : `ERROR` ,
+                        errorMessage : "غير مسجل"
+                    });
+                }
         });
     }catch (err) {
         console.log(err);
